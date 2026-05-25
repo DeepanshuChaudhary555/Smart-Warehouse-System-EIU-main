@@ -1,0 +1,14 @@
+runs/
+checkpoints/
+gdino_checkpoints/
+*.pt
+*.pth
+*.tar
+*.zip
+*.ckpt
+*.engine
+*.onnx
+__pycache__/
+*.pyc
+venv/
+.env

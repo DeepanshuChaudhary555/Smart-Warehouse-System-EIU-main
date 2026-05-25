@@ -1,0 +1,7 @@
+train: 05_dataRack/train/images/train
+val: 05_dataRack/train/images/val
+test: 05_dataRack/test/images/test
+nc: 2
+names:
+- Lift
+- rack
