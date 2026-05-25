@@ -211,6 +211,7 @@ for sample in unique_samples.values():
     )
 
     cv2.putText(
+        
 
         image,
 
@@ -256,7 +257,7 @@ for sample in unique_samples.values():
 
 
     # Wait for key press
-    cv2.waitKey(0)
+    cv2.waitKey(500)
 
 
 cv2.destroyAllWindows()
