@@ -1,25 +1,41 @@
 import os
 import shutil
 import cv2
+import json
+import uuid
+
+from datetime import datetime
 
 from active_learning.pipeline import active_learning_pipeline
 
 from yolo_inference import extract_yolo_predictions
 
 
-# Folder containing images
+# ---------------------------------
+# IMAGE FOLDER
+# ---------------------------------
 image_folder = r"all_images"
 
 
-# Raw selected images folder
+# ---------------------------------
+# OUTPUT FOLDERS
+# ---------------------------------
 output_folder = "selected_samples"
 
-
-# Annotated images folder
 annotated_folder = "annotated_samples"
 
 
-# Clear old selected samples
+# ---------------------------------
+# REPLAY BUFFER FOLDERS
+# ---------------------------------
+replay_folder = "replay_buffer/images"
+
+metadata_folder = "replay_buffer/metadata"
+
+
+# ---------------------------------
+# CLEAR TEMP OUTPUT FOLDERS
+# ---------------------------------
 if os.path.exists(output_folder):
 
     shutil.rmtree(output_folder)
@@ -27,7 +43,6 @@ if os.path.exists(output_folder):
 os.makedirs(output_folder)
 
 
-# Clear old annotated samples
 if os.path.exists(annotated_folder):
 
     shutil.rmtree(annotated_folder)
@@ -35,16 +50,28 @@ if os.path.exists(annotated_folder):
 os.makedirs(annotated_folder)
 
 
+# ---------------------------------
+# CREATE REPLAY BUFFER FOLDERS
+# ---------------------------------
+os.makedirs(replay_folder, exist_ok=True)
+
+os.makedirs(metadata_folder, exist_ok=True)
+
+
 all_predictions = []
 
 
-# Process ALL images
+# ---------------------------------
+# PROCESS ALL IMAGES
+# ---------------------------------
 for filename in os.listdir(image_folder):
 
     if filename.endswith((".jpg", ".png", ".jpeg")):
 
         image_path = os.path.join(
+
             image_folder,
+
             filename
         )
 
@@ -52,27 +79,39 @@ for filename in os.listdir(image_folder):
 
         print("Running YOLO...")
 
+
         predictions = extract_yolo_predictions(
-            image_path
+
+            image_path,
+
+            confidence_threshold=0.5
         )
 
         print(f"Detections: {len(predictions)}")
 
+
         all_predictions.extend(predictions)
 
 
+# ---------------------------------
+# TOTAL DETECTIONS
+# ---------------------------------
 print("\nTOTAL DETECTIONS:")
+
 print(len(all_predictions))
 
 
-# -----------------------------
-# Dynamic Cluster Scaling
-# -----------------------------
+# ---------------------------------
+# DYNAMIC CLUSTER SCALING
+# ---------------------------------
 cluster_count = int(len(all_predictions) * 0.4)
 
 print(f"\nDynamic Cluster Count: {cluster_count}")
 
 
+# ---------------------------------
+# ACTIVE LEARNING PIPELINE
+# ---------------------------------
 print("\nRUNNING ACTIVE LEARNING PIPELINE...")
 
 
@@ -86,8 +125,11 @@ final_samples = active_learning_pipeline(
 )
 
 
-# Remove duplicate image paths
+# ---------------------------------
+# REMOVE DUPLICATE IMAGES
+# ---------------------------------
 unique_samples = {}
+
 
 for sample in final_samples:
 
@@ -104,6 +146,9 @@ print(f"\nUnique Selected Images: {len(unique_samples)}")
 print("\nFINAL SELECTED SAMPLES:")
 
 
+# ---------------------------------
+# PROCESS FINAL SAMPLES
+# ---------------------------------
 for sample in unique_samples.values():
 
     source_path = sample["image_path"]
@@ -111,34 +156,68 @@ for sample in unique_samples.values():
     print(source_path)
 
 
-    # Save raw selected image
+    # ---------------------------------
+    # SAVE RAW SELECTED IMAGE
+    # ---------------------------------
     filename = os.path.basename(source_path)
 
     destination = os.path.join(
+
         output_folder,
+
         filename
     )
 
     shutil.copy(
+
         source_path,
+
         destination
     )
 
     print(f"Saved: {destination}")
 
 
-    # Load image
+    # ---------------------------------
+    # SAVE TO REPLAY BUFFER
+    # ---------------------------------
+    replay_destination = os.path.join(
+
+        replay_folder,
+
+        filename
+    )
+
+    shutil.copy(
+
+        source_path,
+
+        replay_destination
+    )
+
+    print(f"Replay Saved: {replay_destination}")
+
+
+    # ---------------------------------
+    # LOAD IMAGE
+    # ---------------------------------
     image = cv2.imread(source_path)
 
 
-    # Bounding box coordinates
+    # ---------------------------------
+    # BOUNDING BOX
+    # ---------------------------------
     x1, y1, x2, y2 = map(
+
         int,
+
         sample["bbox"]
     )
 
 
-    # Draw bounding box
+    # ---------------------------------
+    # DRAW BOUNDING BOX
+    # ---------------------------------
     cv2.rectangle(
 
         image,
@@ -153,9 +232,9 @@ for sample in unique_samples.values():
     )
 
 
-    # -----------------------------
+    # ---------------------------------
     # CLASS LABEL
-    # -----------------------------
+    # ---------------------------------
     class_text = sample["class_name"]
 
     cv2.putText(
@@ -176,9 +255,9 @@ for sample in unique_samples.values():
     )
 
 
-    # -----------------------------
+    # ---------------------------------
     # CONFIDENCE SCORE
-    # -----------------------------
+    # ---------------------------------
     confidence_text = (
 
         f"Conf: {sample['confidence']:.2f}"
@@ -202,16 +281,15 @@ for sample in unique_samples.values():
     )
 
 
-    # -----------------------------
+    # ---------------------------------
     # ENTROPY SCORE
-    # -----------------------------
+    # ---------------------------------
     entropy_text = (
 
         f"Entropy: {sample['entropy']:.2f}"
     )
 
     cv2.putText(
-        
 
         image,
 
@@ -229,7 +307,9 @@ for sample in unique_samples.values():
     )
 
 
-    # Save annotated image
+    # ---------------------------------
+    # SAVE ANNOTATED IMAGE
+    # ---------------------------------
     annotated_path = os.path.join(
 
         annotated_folder,
@@ -247,7 +327,136 @@ for sample in unique_samples.values():
     print(f"Annotated Saved: {annotated_path}")
 
 
-    # Display image
+    # ---------------------------------
+    # ADVANCED METADATA
+    # ---------------------------------
+
+    # Timestamp
+    timestamp = str(datetime.now())
+
+
+    # Unique Sample ID
+    sample_id = str(uuid.uuid4())
+
+
+    # Image Dimensions
+    image_height = image.shape[0]
+
+    image_width = image.shape[1]
+
+
+    # Bounding Box Area
+    bbox_area = (
+
+        (x2 - x1)
+
+        * (y2 - y1)
+    )
+
+
+    # Metadata Dictionary
+    metadata = {
+
+        # ---------------------------------
+        # BASIC INFO
+        # ---------------------------------
+        "sample_id": sample_id,
+
+        "timestamp": timestamp,
+
+        "image": filename,
+
+        "class": sample["class_name"],
+
+
+        # ---------------------------------
+        # MODEL PREDICTION INFO
+        # ---------------------------------
+        "confidence": sample["confidence"],
+
+        "entropy": sample["entropy"],
+
+        "bbox": sample["bbox"],
+
+        "bbox_area": bbox_area,
+
+
+        # ---------------------------------
+        # IMAGE INFO
+        # ---------------------------------
+        "image_width": image_width,
+
+        "image_height": image_height,
+
+
+        # ---------------------------------
+        # ACTIVE LEARNING INFO
+        # ---------------------------------
+        "cluster_id": sample.get(
+
+            "cluster_id",
+
+            -1
+        ),
+
+        "semantic_embedding": sample["embedding"],
+
+
+        # ---------------------------------
+        # HUMAN REVIEW INFO
+        # ---------------------------------
+        "human_review_status": False,
+
+        "false_positive": False,
+
+
+        # ---------------------------------
+        # DATASET INFO
+        # ---------------------------------
+        "source_split": "unknown",
+
+
+        # ---------------------------------
+        # MODEL VERSION
+        # ---------------------------------
+        "model_version": "YOLO26_v1"
+    }
+
+
+    # ---------------------------------
+    # SAVE METADATA JSON
+    # ---------------------------------
+    metadata_filename = (
+
+        filename.rsplit(".", 1)[0]
+
+        + ".json"
+    )
+
+    metadata_path = os.path.join(
+
+        metadata_folder,
+
+        metadata_filename
+    )
+
+    with open(metadata_path, "w") as f:
+
+        json.dump(
+
+            metadata,
+
+            f,
+
+            indent=4
+        )
+
+    print(f"Metadata Saved: {metadata_path}")
+
+
+    # ---------------------------------
+    # DISPLAY IMAGE
+    # ---------------------------------
     cv2.imshow(
 
         "Selected Sample",
@@ -260,4 +469,7 @@ for sample in unique_samples.values():
     cv2.waitKey(500)
 
 
+# ---------------------------------
+# CLOSE WINDOWS
+# ---------------------------------
 cv2.destroyAllWindows()
