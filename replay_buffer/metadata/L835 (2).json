@@ -1,6 +1,6 @@
 {
-    "sample_id": "28eb11bc-bca7-4720-b532-ee1b03c0d0c6",
-    "timestamp": "2026-05-25 15:16:46.609418",
+    "sample_id": "64a7917c-7879-4ba7-b542-ea077863f42d",
+    "timestamp": "2026-05-26 09:34:19.643441",
     "image": "L835 (2).jpg",
     "class": "rack",
     "confidence": 0.7771499752998352,
@@ -15,7 +15,7 @@
     "image_width": 1920,
     "image_height": 1080,
     "cluster_id": -1,
-    "semantic_embedding": [
+    "semantic_embeddings": [
         -0.1934947371482849,
         -0.2158452421426773,
         0.33626192808151245,

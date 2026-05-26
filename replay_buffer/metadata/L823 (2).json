@@ -1,6 +1,6 @@
 {
-    "sample_id": "95aba32f-cbab-412e-8b16-7624ae09e5ba",
-    "timestamp": "2026-05-25 15:17:06.848313",
+    "sample_id": "b9dad5b1-cae1-4466-923b-930c2b799e72",
+    "timestamp": "2026-05-26 09:34:21.260768",
     "image": "L823 (2).jpg",
     "class": "rack",
     "confidence": 0.5573453307151794,
@@ -15,7 +15,7 @@
     "image_width": 1920,
     "image_height": 1080,
     "cluster_id": -1,
-    "semantic_embedding": [
+    "semantic_embeddings": [
         -0.18859617412090302,
         -0.22679167985916138,
         0.386586993932724,

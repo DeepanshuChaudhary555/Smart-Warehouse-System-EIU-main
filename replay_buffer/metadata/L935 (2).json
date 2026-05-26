@@ -1,6 +1,6 @@
 {
-    "sample_id": "988da77e-9255-4593-ac1c-920b2acc7434",
-    "timestamp": "2026-05-25 15:17:36.178988",
+    "sample_id": "f515a522-d48c-4334-86c2-50ff72e1d00b",
+    "timestamp": "2026-05-26 09:34:23.001470",
     "image": "L935 (2).jpg",
     "class": "rack",
     "confidence": 0.6217837929725647,
@@ -15,7 +15,7 @@
     "image_width": 1920,
     "image_height": 1080,
     "cluster_id": -1,
-    "semantic_embedding": [
+    "semantic_embeddings": [
         -0.18483583629131317,
         -0.2090487778186798,
         0.41824084520339966,

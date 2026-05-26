@@ -1,6 +1,6 @@
 {
-    "sample_id": "38fc9938-8610-4b34-a644-79857ae80f47",
-    "timestamp": "2026-05-25 15:18:09.464383",
+    "sample_id": "dfc38e84-bff8-48f2-a6ba-f5450674fb25",
+    "timestamp": "2026-05-26 09:34:24.973002",
     "image": "L77_1.jpg",
     "class": "rack",
     "confidence": 0.5312228202819824,
@@ -15,7 +15,7 @@
     "image_width": 1920,
     "image_height": 1080,
     "cluster_id": -1,
-    "semantic_embedding": [
+    "semantic_embeddings": [
         -0.16269129514694214,
         -0.12259676307439804,
         0.2761470079421997,

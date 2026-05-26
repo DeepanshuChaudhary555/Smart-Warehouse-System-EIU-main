@@ -1,6 +1,6 @@
 {
-    "sample_id": "faac6b0d-8ba9-490a-825e-4eaba1a5748d",
-    "timestamp": "2026-05-25 15:17:07.381354",
+    "sample_id": "1c9d419c-fd8d-4d6b-a3fe-4a5c6ff07409",
+    "timestamp": "2026-05-26 09:34:21.292379",
     "image": "L88_3 (2).jpg",
     "class": "rack",
     "confidence": 0.7180627584457397,
@@ -15,7 +15,7 @@
     "image_width": 1920,
     "image_height": 1080,
     "cluster_id": -1,
-    "semantic_embedding": [
+    "semantic_embeddings": [
         -0.18960155546665192,
         -0.22263717651367188,
         0.4086777865886688,

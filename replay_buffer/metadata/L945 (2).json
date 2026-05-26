@@ -1,6 +1,6 @@
 {
-    "sample_id": "693b82f8-fb60-4f21-a098-8ab59bb4fc28",
-    "timestamp": "2026-05-25 15:17:24.736886",
+    "sample_id": "e3dc473d-8aa8-4184-a908-6b5695bd17b4",
+    "timestamp": "2026-05-26 09:34:22.328550",
     "image": "L945 (2).jpg",
     "class": "rack",
     "confidence": 0.7979072332382202,
@@ -15,7 +15,7 @@
     "image_width": 1920,
     "image_height": 1080,
     "cluster_id": -1,
-    "semantic_embedding": [
+    "semantic_embeddings": [
         -0.18795976042747498,
         -0.2150120884180069,
         0.3687177300453186,

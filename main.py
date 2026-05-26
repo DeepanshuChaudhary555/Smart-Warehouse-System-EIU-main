@@ -140,10 +140,10 @@ for sample in final_samples:
         unique_samples[image_path] = sample
 
 
-print(f"\nUnique Selected Images: {len(unique_samples)}")
-
-
-print("\nFINAL SELECTED SAMPLES:")
+print(
+    f"\nUnique Samples Selected For Human Review: "
+    f"{len(unique_samples)}"
+)
 
 
 # ---------------------------------
@@ -354,7 +354,9 @@ for sample in unique_samples.values():
     )
 
 
-    # Metadata Dictionary
+    # ---------------------------------
+    # METADATA DICTIONARY
+    # ---------------------------------
     metadata = {
 
         # ---------------------------------
@@ -399,7 +401,7 @@ for sample in unique_samples.values():
             -1
         ),
 
-        "semantic_embedding": sample["embedding"],
+        "semantic_embeddings": sample["embedding"],
 
 
         # ---------------------------------
@@ -457,13 +459,41 @@ for sample in unique_samples.values():
     # ---------------------------------
     # DISPLAY IMAGE
     # ---------------------------------
+
+    window_name = (
+
+        f"Human Review Sample - {filename}"
+    )
+
+    cv2.setWindowTitle(
+
+        "Human Review",
+
+        window_name
+    )
+
+    cv2.namedWindow(
+
+        "Human Review",
+
+        cv2.WINDOW_NORMAL
+    )
+
+    cv2.setWindowProperty(
+
+        "Human Review",
+
+        cv2.WND_PROP_FULLSCREEN,
+
+        cv2.WINDOW_NORMAL
+    )
+
     cv2.imshow(
 
-        "Selected Sample",
+        "Human Review",
 
         image
     )
-
 
     # Wait for key press
     cv2.waitKey(500)
