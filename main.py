@@ -84,7 +84,7 @@ for filename in os.listdir(image_folder):
 
             image_path,
 
-            confidence_threshold=0.5
+            confidence_threshold=0.435
         )
 
         print(f"Detections: {len(predictions)}")
