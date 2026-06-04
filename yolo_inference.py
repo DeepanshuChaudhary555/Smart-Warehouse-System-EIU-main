@@ -5,7 +5,7 @@ import numpy as np
 
 
 # Load trained YOLO model
-model = YOLO("runs/detect/train/weights/best.pt")
+model = YOLO("runs/detect/runs/detect/retrain_active_learning-2/weights/best.pt")
 
 
 # Global feature storage
